@@ -3,7 +3,7 @@ Transfer products between warehouses using replenishment
 ========================================================
 
 For companies that use multiple warehouses, it is often necessary to transfer items between them.
-This is referred to as an *inter-warehouse transfer*. *Odoo Inventory* handles the administrative
+This is referred to as an *inter-warehouse transfer*. Odoo *Inventory* handles the administrative
 process of inter-warehouse transfers to ensure that inventory counts remain accurate during and
 after the transfer. This document will detail the method for conducting an inter-warehouse transfer
 using replenishment.
@@ -11,10 +11,10 @@ using replenishment.
 Configure warehouses for inter-warehouse replenishment
 ======================================================
 
-If the Multi-Step Routes setting has not been enabled already, do so now from the
-:menuselection:`Inventory` module by clicking :menuselection:`Configuration --> Settings` and
-checking the box under the :guilabel:`Warehouse` tab. This will provide additional configuration
-options when creating a second warehouse that are needed for inter-warehouse replenishment.
+First, ensure the :guilabel:`Multi-Step Routes` setting is enabled by navigating to
+:menuselection:`Inventory --> Configuration --> Settings`, and then check the box under the
+:guilabel:`Warehouse` tab. This will provide additional configuration options when creating a second
+warehouse that are needed for inter-warehouse replenishment.
 
 By default, Odoo comes with a main warehouse already configured. If an additional warehouse has not
 already been created, do so now from the :guilabel:`Inventory` module by selecting
@@ -22,12 +22,15 @@ already been created, do so now from the :guilabel:`Inventory` module by selecti
 products will be transferred to from the :guilabel:`Warehouses` page and then click :guilabel:`Edit`
 to change its settings. Configure the warehouse as follows:
 
-- :guilabel:`Warehouse`: choose a name that is not already being used for another warehouse
-- :guilabel:`Short Name`: choose a short name by which the warehouse will be identified
+- :guilabel:`Warehouse`: choose a name that is not already being used for another warehouse (e.g.
+  `Alternative Warehouse`)
+- :guilabel:`Short Name`: choose a short name by which the warehouse will be identified (e.g.
+  `ALT_WH`)
 
 Click :guilabel:`Save` and the new warehouse will be created. In addition, a new :guilabel:`Resupply
-From` field will appear on the form. Click :guilabel:`Edit` and then check the box next to the
-warehouse that will be used to resupply the warehouse that is being configured.
+From` field will appear on the warehouse's form. Click :guilabel:`Edit` and then check the box next
+to the desired warehouse that will be used to resupply the warehouse that is currently being
+configured.
 
 .. image:: warehouse_replenishment_transfer/new-warehouse-configuration.png
    :align: center
@@ -43,10 +46,11 @@ Configure products for inter-warehouse replenishment
 
 Products must also be configured properly in order to be transferred between warehouses. Starting
 from the :menuselection:`Inventory` module, go to :menuselection:`Products --> Products` and select
-an existing product or configure a new one by clicking :guilabel:`Create`. On the product form, go
-to the :guilabel:`Inventory` tab and enable the checkbox for :guilabel:`X: Supply Product from Y`,
-with X being the warehouse receiving the transferred products and Y being the warehouse that
-products are transferred from.
+an existing product or configure a new one by clicking :guilabel:`Create`.
+
+Then, on the product form, go to the :guilabel:`Inventory` tab and enable the checkbox for
+:guilabel:`X: Supply Product from Y`, with X being the warehouse receiving the transferred products
+and Y being the warehouse that products are transferred from.
 
 .. image:: warehouse_replenishment_transfer/product-transfer-configuration.png
    :align: center
@@ -111,9 +115,12 @@ Automate inter-warehouse replenishment
 ======================================
 
 Using reordering rules, it is possible to automate the process of replenishing one warehouse from
-another. Starting from the :menuselection:`Inventory` module, select :menuselection:`Products -->
-Products` and then choose the product that will be replenished. From the product page, select
-:menuselection:`Reordering Rules --> Create` and configure the form as follows:
+another.
+
+To get started, navigate to :menuselection:`Inventory --> Products --> Products` and then
+choose the product that will be replenished. From the product page, select the :guilabel:`Reordering
+Rules` smart button at the top of the form, and then on the next page, click :guilabel:`Create` to
+configure the form as follows:
 
 - :guilabel:`Location`: the location that the reordering rule will replenish when triggered, in this
   case, the incoming warehouse
@@ -123,18 +130,21 @@ Products` and then choose the product that will be replenished. From the product
   at the incoming warehouse up to this quantity
 - :guilabel:`Multiple Quantity`: specify if the product should be replenished in batches of a
   certain quantity; for example, a product could be replenished in batches of 20
-- :guilabel:`UoM`: the unit of measure used for reordering the product; this can simply be "units",
-  or a unit of measurement for weight, length, etc.
+- :guilabel:`UoM`: the unit of measure used for reordering the product; this value can simply be
+  `Units`, or a specific unit of measurement for weight, length, etc.
 
 .. image:: warehouse_replenishment_transfer/reordering-rule-configuration.png
    :align: center
    :alt: A fully configured reordering rule.
 
-Click :guilabel:`Save` and the reordering rule will be created. Now, when the scheduler runs
-automatically each day, a transfer will be created for each reordering rule that has been triggered.
-To manually trigger reordering rules, start from the :menuselection:`Inventory` module and select
-:menuselection:`Operation --> Run Scheduler`, then click the green :guilabel:`Run Scheduler` button
-in the pop-up that appears.
+Finish by clicking :guilabel:`Save` and the reordering rule will be created. Now, when the scheduler
+runs automatically each day, a transfer will be created for each reordering rule that has been
+triggered.
+
+.. tip::
+   To manually trigger reordering rules, start from the :menuselection:`Inventory` module and select
+   :menuselection:`Operation --> Run Scheduler`, then click the green :guilabel:`Run Scheduler`
+   button in the pop-up that appears.
 
 After the scheduler runs, a delivery order and receipt will be created for the outgoing and incoming
 warehouses, respectively. Both the delivery order and receipt should be processed using the same
